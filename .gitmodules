@@ -1,0 +1,3 @@
+[submodule "cube/f2"]
+	path = cube/f2
+	url = https://github.com/STMicroelectronics/STM32CubeF2.git
