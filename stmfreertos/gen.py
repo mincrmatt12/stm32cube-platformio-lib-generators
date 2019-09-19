@@ -96,6 +96,7 @@ shutil.rmtree(os.path.join("librepo", "src/portable/Tasking"))
 shutil.rmtree(os.path.join("librepo", "src/portable/RVDS"))
 print("adding script...")
 shutil.copy("./add_config.py", "librepo/add_config.py")
-
+print("adding license...")
+shutil.copy(os.path.join(CUBE, "Middlewares/Third_Party/FreeRTOS/License/license.txt"), "librepo")
 print("generated.")
 
