@@ -54,6 +54,9 @@ in the future, however for now copy them from an STM32CubeMX project. If you inc
     "platforms": "ststm32",
     "frameworks": "stm32cube",
     "version": version,
+    "dependencies": {
+        "6696": version
+    },
     "build": {
         "extraScript": "add_config.py"
     }
