@@ -9,6 +9,7 @@ import os
 import shutil
 import re
 import json
+import versions
 
 CUBE = "../cube/f2"
 
@@ -24,19 +25,14 @@ if not os.path.exists("librepo"):
 #  get version
 #  yes i know re's for xml are terrible, but i only need a parameter
 
-with open(os.path.join(CUBE, "package.xml"), "r") as f:
-    version = re.findall(r'DBVersion="([\d.]+)"', f.read())[0]
+version = versions.lwip()
 
 print("found cube version", version)
 
 library_json = {
     "name": "STM32Cube Middleware-LwIP",
     "keywords": "socket",
-    "description": """This library links in the STM32Cube version of LwIP to your project. It does _not_ include the stub ethernetif.c and other assorted files required to use the Ethernet library. These may be released as a separate library at some point
-in the future, however for now copy them from an STM32CubeMX project. If you include the FreeRTOS library as well, a CubeMX project should compile under platformio.
-
-<todo config>
-""",
+    "description": """This library links in the STM32Cube version of LwIP to your project.""",
     "repository":
     {
         "type": "git",
@@ -55,7 +51,7 @@ in the future, however for now copy them from an STM32CubeMX project. If you inc
     "frameworks": "stm32cube",
     "version": version,
     "dependencies": {
-        "6696": version
+        "6696": versions.freertos()
     },
     "build": {
         "extraScript": "add_config.py"
@@ -91,4 +87,5 @@ print("adding script...")
 shutil.copy("./add_config.py", "librepo/add_config.py")
 print("adding license...")
 shutil.copy(os.path.join(CUBE, "Middlewares/Third_Party/LwIP/COPYING"), "librepo")
+shutil.copy("./README.md", "librepo/README.md")
 print("generated.")

@@ -9,6 +9,7 @@ import os
 import shutil
 import re
 import json
+import versions
 
 CUBE = "../cube/f2"
 
@@ -24,33 +25,13 @@ if not os.path.exists("librepo"):
 #  get version
 #  yes i know re's for xml are terrible, but i only need a parameter
 
-with open(os.path.join(CUBE, "package.xml"), "r") as f:
-    version = re.findall(r'DBVersion="([\d.]+)"', f.read())[0]
-
+version = versions.freertos()
 print("found cube version", version)
 
 library_json = {
     "name": "STM32Cube Middleware-FreeRTOS",
     "keywords": "rtos",
-    "description": """This library links in the version of FreeRTOS shipped with the STM32Cube framework.
-
-Configuration is possible with extra options in the platformio.ini.
-These are:
-
-    - custom_freertos_config_location: *REQUIRED* must point to either a path containing FreeRTOSConfig.h or the file itself.
-    - custom_freertos_heap_impl: *OPTIONAL, defaults to heap_4.c* heap implementation file to use (see FreeRTOS docs)
-    - custom_freertos_features: *OPTIONAL*, comma separated list of optional files to build, any of ["coroutines", "timers", "event_groups", "stream_buffers"]
-
-There is currently no support for the MPU.
-If you use the RTOS heap you may want to disable allocation of a heap in the link script.
-A good starting point for the FreeRTOSConfig.h is in the include directory, and can be used a default by using
-
-```
-#include "FreeRTOSConfig_template.h"
-```
-
-as your FreeRTOSConfig.h, or by simply copying its contents which is the preferred method if you plan to modify values in it.
-""",
+    "description": """This library links in the version of FreeRTOS shipped with the STM32Cube framework. """,
     "repository":
     {
         "type": "git",
@@ -89,7 +70,6 @@ shutil.copytree(os.path.join(CUBE, "Middlewares/Third_Party/FreeRTOS/Source"), o
 print("done.")
 print("cleaning up...")
 shutil.move(os.path.join("librepo", "src/include"), os.path.join("librepo", "include"))
-shutil.rmtree(os.path.join("librepo", "src/CMSIS_RTOS_V2"))
 shutil.rmtree(os.path.join("librepo", "src/portable/IAR"))
 shutil.rmtree(os.path.join("librepo", "src/portable/Keil"))
 shutil.rmtree(os.path.join("librepo", "src/portable/Tasking"))
@@ -98,5 +78,6 @@ print("adding script...")
 shutil.copy("./add_config.py", "librepo/add_config.py")
 print("adding license...")
 shutil.copy(os.path.join(CUBE, "Middlewares/Third_Party/FreeRTOS/License/license.txt"), "librepo")
+shutil.copy("./README.md", "librepo/README.md")
 print("generated.")
 

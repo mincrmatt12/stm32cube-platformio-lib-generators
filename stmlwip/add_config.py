@@ -1,17 +1,8 @@
-try:
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
-
 from os.path import dirname, join, exists, isdir, basename
 Import('env')
 
-config = configparser.ConfigParser()
-config.read(env.get("PROJECT_CONFIG"))
-
-try:
-    custom_lwip_location = config.get("env:" + env.get("PIOENV"), "custom_lwip_opts_location")
-except configparser.NoOptionError:
+custom_lwip_location = env.GetProjectOption("custom_lwip_opts_location", None)
+if custom_lwip_location is None:
     raise ValueError("Please set custom_lwip_opts_location in your platformio.ini to the location of a lwipopts.h header file -- relative to the location of platformio.ini")
 
 if not isdir(custom_lwip_location):
